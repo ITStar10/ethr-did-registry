@@ -28,3 +28,10 @@ main().catch((error) => {
   console.error(error)
   process.exitCode = 1
 })
+
+// Polygon testnet
+// https://mumbai.polygonscan.com/address/0x704895251182592fE8AF39839d3b293d8a184f01#code
+
+
+// BSC testnet
+// 0xb525f4bC2b186FA153099D86488e40621592464b

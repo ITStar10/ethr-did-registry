@@ -44,6 +44,11 @@ describe('ERC1056', () => {
     didReg = await Registry.deploy()
     await didReg.deployed()
     ;[identity, identity2, delegate, delegate2, delegate3, badBoy] = await ethers.getSigners()
+
+    const accountList = await ethers.getSigners()
+    for (const item of accountList) {
+      console.log(item.address)
+    }
   })
 
   const privateKey = arrayify('0xa285ab66393c5fdda46d6fbad9e27fafd438254ab72ad5acb681a0e9f20f5d7b')
@@ -85,6 +90,7 @@ describe('ERC1056', () => {
     })
   })
 
+  /*
   describe('changeOwner()', () => {
     describe('using msg.sender', () => {
       describe('as current owner', () => {
@@ -527,6 +533,7 @@ describe('ERC1056', () => {
       })
     })
   })
+  */
 
   describe('setAttribute()', () => {
     describe('using msg.sender', () => {
@@ -692,6 +699,7 @@ describe('ERC1056', () => {
     })
   })
 
+  /*
   describe('revokeAttribute()', () => {
     describe('using msg.sender', () => {
       describe('as current owner', () => {
@@ -861,4 +869,5 @@ describe('ERC1056', () => {
       ])
     })
   })
+  */
 })

@@ -7,6 +7,11 @@ import '@typechain/hardhat'
 import 'hardhat-gas-reporter'
 import 'solidity-coverage'
 
+// For BSC verification after deploy
+import '@nomiclabs/hardhat-ethers'
+
+const { privateKey, polygonscan, bscscan } = require('/mnt/Work/Sec/test.json')
+
 dotenv.config()
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -26,7 +31,7 @@ const config: HardhatUserConfig = {
   solidity: {
     compilers: [
       {
-        version: '0.8.6',
+        version: '0.8.7',
         settings: {
           optimizer: {
             enabled: true,
@@ -43,6 +48,27 @@ const config: HardhatUserConfig = {
     artifacts: './artifacts',
   },
   networks: {
+    bsctestnet: {
+      // url: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+      url: 'https://speedy-nodes-nyc.moralis.io/bd1c39d7c8ee1229b16b4a97/bsc/testnet',
+      chainId: 97,
+      accounts: [privateKey],
+    },
+    bscmainnet: {
+      url: 'https://bsc-dataseed.binance.org/',
+      chainId: 56,
+      accounts: [privateKey],
+    },
+    polygonmainnet: {
+      url: 'https://polygon-rpc.com/',
+      chainId: 137,
+      accounts: [privateKey],
+    },
+    polygontestnet: {
+      url: 'https://rpc-mumbai.maticvigil.com/',
+      chainId: 80001,
+      accounts: [privateKey],
+    },
     ropsten: {
       url: process.env.ROPSTEN_URL || '',
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
@@ -53,7 +79,7 @@ const config: HardhatUserConfig = {
     currency: 'USD',
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: polygonscan,
   },
 }
 

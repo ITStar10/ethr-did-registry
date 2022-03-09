@@ -1,8 +1,25 @@
 /* SPDX-License-Identifier: MIT */
-
 pragma solidity ^0.8.6;
 
+import "hardhat/console.sol";
+
 contract EthereumDIDRegistry {
+
+  struct DelegateParams{
+    address identity;
+    // address actor;
+    bytes32 delegateType;
+    address delegate;
+    uint validity;
+  }
+
+  struct AttributeParams{
+    address identity;
+    // address actor;
+    bytes32 name;
+    bytes value;
+    uint validity;
+  }
 
   mapping(address => address) public owners;
   mapping(address => mapping(bytes32 => mapping(address => uint))) public delegates;
@@ -72,6 +89,7 @@ contract EthereumDIDRegistry {
   }
 
   function addDelegate(address identity, address actor, bytes32 delegateType, address delegate, uint validity) internal onlyOwner(identity, actor) {
+    console.log("addDelegate", identity);
     delegates[identity][keccak256(abi.encode(delegateType))][delegate] = block.timestamp + validity;
     emit DIDDelegateChanged(identity, delegateType, delegate, block.timestamp + validity, changed[identity]);
     changed[identity] = block.number;
@@ -128,5 +146,30 @@ contract EthereumDIDRegistry {
     bytes32 hash = keccak256(abi.encodePacked(bytes1(0x19), bytes1(0), this, nonce[identityOwner(identity)], identity, "revokeAttribute", name, value));
     revokeAttribute(identity, checkSignature(identity, sigV, sigR, sigS, hash), name, value);
   }
+
+  function bulkAdd(
+    DelegateParams[] memory delegateParams,
+    AttributeParams[] memory attributeParams
+  ) external {
+    for (uint i = 0; i < delegateParams.length; i++) {
+      addDelegate(
+        delegateParams[i].identity, 
+        // delegateParams[i].actor,
+        delegateParams[i].delegateType,
+        delegateParams[i].delegate,
+        delegateParams[i].validity);
+    }
+
+    for (uint i = 0; i < attributeParams.length; i++) {
+      setAttribute(
+        attributeParams[i].identity, 
+        // attributeParams[i].actor,
+        attributeParams[i].name,
+        attributeParams[i].value,
+        attributeParams[i].validity);
+    }
+  }
+
+  
 
 }
